@@ -19,12 +19,12 @@ def get_weather(city: str) -> dict:
     """
     if city.lower() == "new york":
         return {
-            "status": "success",
-            "report": (
-                "The weather in New York is sunny with a temperature of 25 degrees"
-                " Celsius (77 degrees Fahrenheit)."
-            ),
-        }
+                "status": "success",
+                "report": (
+                    "The weather in New York is sunny with a temperature of 25 degrees"
+                    " Celsius (77 degrees Fahrenheit)."
+                    ),
+                }
     elif city.lower() == "singapore":
         return {
                 "status": "success",
@@ -35,9 +35,9 @@ def get_weather(city: str) -> dict:
                 }
     else:
         return {
-            "status": "error",
-            "error_message": f"Weather information for '{city}' is not available.",
-        }
+                "status": "error",
+                "error_message": f"Weather information for '{city}' is not available.",
+                }
 
 
 def get_current_time(city: str) -> dict:
@@ -56,34 +56,34 @@ def get_current_time(city: str) -> dict:
         tz_identifier = "Asia/Singapore"
     else:
         return {
-            "status": "error",
-            "error_message": (
-                f"Sorry, I don't have timezone information for {city}."
-            ),
-        }
+                "status": "error",
+                "error_message": (
+                    f"Sorry, I don't have timezone information for {city}."
+                    ),
+                }
 
     tz = ZoneInfo(tz_identifier)
     now = datetime.datetime.now(tz)
     report = (
-        f'The current time in {city} is {now.strftime("%Y-%m-%d %H:%M:%S %Z%z")}'
-    )
+            f'The current time in {city} is {now.strftime("%Y-%m-%d %H:%M:%S %Z%z")}'
+            )
     return {"status": "success", "report": report}
 
 
 root_agent = Agent(
-    name="weather_time_agent",
-    #model="gemini-2.0-flash",
-    # model="gemini-2.0-flash-live-001",
-    # model="gemini-2.5-flash-preview-05-20",
-    #model = LiteLlm(model=GEMMA_3_4B_TOOLS),
-    model = LiteLlm(model=MISTRAL),
-    #model = LiteLlm(model=DEEPSEEK_R1_8B),
-    #model = LiteLlm(model=LLAMA_3_2),
-    description=(
-        "Agent to answer questions about the time and weather in a city."
-    ),
-    instruction=(
-        "You are a helpful agent who can answer user questions about the time and weather in a city."
-    ),
-    tools=[get_weather, get_current_time],
-)
+        name="weather_time_agent",
+        #model="gemini-2.0-flash",
+        # model="gemini-2.0-flash-live-001",
+        # model="gemini-2.5-flash-preview-05-20",
+        #model = LiteLlm(model=GEMMA_3_4B_TOOLS),
+        model = LiteLlm(model=MISTRAL),
+        #model = LiteLlm(model=DEEPSEEK_R1_8B),
+        #model = LiteLlm(model=LLAMA_3_2),
+        description=(
+            "Agent to answer questions about the time and weather in a city."
+            ),
+        instruction=(
+            "You are a helpful agent who can answer user questions about the time and weather in a city."
+            ),
+        tools=[get_weather, get_current_time],
+        )
