@@ -2,7 +2,8 @@ from google.adk.agents import Agent
 from google.adk.models.lite_llm import LiteLlm
 from typing import Optional
 
-MISTRAL = "ollama_chat/mistral"  # works well
+#MISTRAL = "ollama_chat/mistral"  # works well
+MISTRAL = "openai/mistral"  # use openai api with ollama
 
 def get_weather(city: str) -> dict:
     """Retrieves the current weather report for a specified city.
