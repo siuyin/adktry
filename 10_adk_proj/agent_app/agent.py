@@ -14,7 +14,8 @@ sys.path.append(".")
 load_dotenv()
 
 model_name=LiteLlm(os.getenv("MODEL"))
-prompt=os.getenv("PROMPT")
+prompt=os.getenv("PROMPT",default="What is the capital of France?")
+
 
 async def main():
     app_name="my_agent_app"
