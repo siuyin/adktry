@@ -8,6 +8,7 @@ MISTRAL = "ollama_chat/mistral"  # works well
 LLAMA_3_2 = "ollama_chat/llama3.2:3b" # no good
 DEEPSEEK_R1_8B = "ollama_chat/deepseek-r1:8b" # problem with function calling interface
 QWEN3_0_6B = "ollama_chat/qwen3:0.6b"
+QWEN3_1_7B = "ollama_chat/qwen3:1.7b"
 
 def get_weather(city: str) -> dict:
     """Retrieves the current weather report for a specified city.
@@ -43,6 +44,7 @@ def get_weather(city: str) -> dict:
 
 def get_current_time(city: str) -> dict:
     """Returns the current time in a specified city.
+    Time is volatile. Do not cache. Always rerun fuction when user asks for time.
 
     Args:
         city (str): The name of the city for which to retrieve the current time.
@@ -79,13 +81,16 @@ root_agent = Agent(
         #model = LiteLlm(model=GEMMA_3_4B_TOOLS),
         #model = LiteLlm(model=MISTRAL),
         model = LiteLlm(model=QWEN3_0_6B),
+        #model = LiteLlm(model=QWEN3_1_7B),
         #model = LiteLlm(model=DEEPSEEK_R1_8B),
         #model = LiteLlm(model=LLAMA_3_2),
         description=(
             "Agent to answer questions about the time and weather in a city."
             ),
         instruction=(
-            "You are a helpful agent who can answer user questions about the time and weather in a city."
+            """You are a helpful agent who can answer user questions about the time and weather in a city.
+            When answering questions about time, you must always call the tool. Do no use cached results.
+            """
             ),
         tools=[get_weather, get_current_time],
         )
