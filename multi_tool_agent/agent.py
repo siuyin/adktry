@@ -7,6 +7,7 @@ GEMMA_3_4B_TOOLS = "ollama_chat/PetrosStav/gemma3-tools:4b" # no good
 MISTRAL = "ollama_chat/mistral"  # works well
 LLAMA_3_2 = "ollama_chat/llama3.2:3b" # no good
 DEEPSEEK_R1_8B = "ollama_chat/deepseek-r1:8b" # problem with function calling interface
+QWEN3_0_6B = "ollama_chat/qwen3:0.6b"
 
 def get_weather(city: str) -> dict:
     """Retrieves the current weather report for a specified city.
@@ -76,7 +77,8 @@ root_agent = Agent(
         # model="gemini-2.0-flash-live-001",
         # model="gemini-2.5-flash-preview-05-20",
         #model = LiteLlm(model=GEMMA_3_4B_TOOLS),
-        model = LiteLlm(model=MISTRAL),
+        #model = LiteLlm(model=MISTRAL),
+        model = LiteLlm(model=QWEN3_0_6B),
         #model = LiteLlm(model=DEEPSEEK_R1_8B),
         #model = LiteLlm(model=LLAMA_3_2),
         description=(
