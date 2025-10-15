@@ -52,7 +52,7 @@ def _render_reference(callback_context: CallbackContext, llm_response: LlmRespon
 
 critic_agent=Agent(
         model=os.getenv("MODEL"),
-        name='critic_agent',
+        name="critic_agent",
         instruction=prompt.CRITIC_PROMPT,
         tools=[google_search],
         )
