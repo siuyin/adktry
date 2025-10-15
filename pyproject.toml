@@ -5,10 +5,9 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "crewai>=0.95.0",
-    "crewai-tools>=0.76.0",
+    "crewai-tools==1.0.0b1",
     "dateparser>=1.2.2",
-    "google-adk>=1.9.0",
+    "google-adk>=1.16.0",
     "langchain-community>=0.3.31",
     "litellm>=1.74.15.post1",
     "pandas>=2.3.3",
