@@ -1,7 +1,6 @@
 import os
 from google.adk import Agent
 from google.adk.models.lite_llm import LiteLlm
-import litellm
 from google.adk.agents.callback_context import CallbackContext
 from google.adk.models import LlmResponse
 from dotenv import load_dotenv
@@ -26,12 +25,9 @@ def _remove_end_of_edit_mark(callback_context: CallbackContext,llm_response: Llm
             part.text=part.text.split(_END_OF_EDIT_MARK,1)[0]
     return llm_response
 
-#print(f"Model: {os.getenv('MODEL')}")
-litellm._turn_on_debug()
 reviser_agent=Agent(
-        #model = LiteLlm( os.getenv("MODEL") ),
-        model = LiteLlm( "ollama_chat/qwen3:0.6b" ),
-        #model = os.getenv("MODEL"),
+        model = LiteLlm( os.getenv("OLLAMA_MODEL") ),
         name="reviser_agent",
         instruction=prompt.REVISER_PROMPT,
+        after_model_callback=_remove_end_of_edit_mark,
         )

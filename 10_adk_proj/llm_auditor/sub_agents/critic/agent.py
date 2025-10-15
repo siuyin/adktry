@@ -55,4 +55,5 @@ critic_agent=Agent(
         name="critic_agent",
         instruction=prompt.CRITIC_PROMPT,
         tools=[google_search],
+        after_model_callback=_render_reference,
         )
