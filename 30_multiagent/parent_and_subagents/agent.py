@@ -1,14 +1,29 @@
 import os
-import sys
 
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 from google.adk import Agent
-from google.adk.models.lite_llm import LiteLlm
-from google.genai import types
 
+# from google.adk.models.lite_llm import LiteLlm
+from google.genai import types
 from google.adk.tools.tool_context import ToolContext
 
-load_dotenv()
+# load_dotenv()
+
+
+def save_attractions_to_state(
+    tool_context: ToolContext, attractions: list[str]
+) -> dict[str, str]:
+    """Saves the list of attractions to state["attractions"]
+    Args:
+    attractions [str]: a list of strings to add to the list of attractions.
+
+    Returns:
+    status dict
+    """
+    existing_attractions = tool_context.state.get("attractions", [])
+    tool_context.state["attractions"] = existing_attractions + attractions
+    return {"status": "success"}
+
 
 attractions_planner = Agent(
     name="attractions_planner",
@@ -17,7 +32,12 @@ attractions_planner = Agent(
     description="Build a list of attractions to visit in a country.",
     instruction="""
         - Provide the user options for attractions to visit within their selected country.
+        - When they reply, use your tool to save their selected attraction
+        and then provide more possible attractions.
+        - If they ask to view the list, provide a bulleted list of
+        { attractions? } and then suggest some more.
         """,
+    tools=[save_attractions_to_state],
 )
 
 travel_brainstormer = Agent(
@@ -38,8 +58,8 @@ travel_brainstormer = Agent(
 
 root_agent = Agent(
     name="steering",
-    model=LiteLlm(os.getenv("MODEL")),
-    # model=os.getenv("GEMINI_MODEL"),
+    # model=LiteLlm(os.getenv("MODEL")),
+    model=os.getenv("GEMINI_MODEL"),
     description="Start a user on a travel adventure.",
     instruction="""
         Ask the user if they know where they would like to travel
