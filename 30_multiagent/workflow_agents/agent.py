@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 
 from google.adk import Agent
 from google.adk.agents import SequentialAgent, LoopAgent, ParallelAgent
+from google.adk.tools import exit_loop
 from google.adk.tools.tool_context import ToolContext
 from google.adk.tools.langchain_tool import LangchainTool
 from google.genai import types
@@ -121,12 +122,47 @@ researcher = Agent(
     ],
 )
 
+critic = Agent(
+    name="critic",
+    model=model_name,
+    description="Reviews the outline so that it can be improved.",
+    instruction="""
+        INSTRUCTIONS:
+        Consider these questions about the PLOT_OUTLINE:
+        - Does it meet a satisfying three-act cinematic structure?
+        - Do the chracters' struggles seem engaging?
+        - Does it feel grounded in a real time period in history?
+        - Does it sufficiently incorporate historical details from the RESEARCH?
+
+        If the PLOT_OUTLINE does a good job with these questions, exit the writing loop with your 'exit_loop' tool.
+        If significant improvements can be made use the 'append_to_state' tool to add your feedback to the field 'CRITICAL_FEEDBACK'.
+        Explain your decision and briefly summarize the feedback you have provided.
+
+          PLOT_OUTLINE:
+          { PLOT_OUTLINE? }
+
+          RESEARCH:
+          { research? }
+          """,
+    tools=[append_to_state, exit_loop],
+)
+
+writers_room = LoopAgent(
+    name="writers_room",
+    description="Iterates through research and writing to improve a movie plot outline.",
+    sub_agents=[
+        researcher,
+        screenwriter,
+        critic,
+    ],
+    max_iterations=5,
+)
+
 film_concept_team = SequentialAgent(
     name="film_concept_team",
     description="Write a film plot outline and save it as a text file.",
     sub_agents=[
-        researcher,
-        screenwriter,
+        writers_room,
         file_writer,
     ],
 )
